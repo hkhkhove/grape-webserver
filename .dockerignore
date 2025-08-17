@@ -1,0 +1,10 @@
+webpage/node_modules
+webpage/dist
+webserver/target
+.DS_Store
+.vscode
+.git
+.gitignore
+.gitattributes
+__pycache__
+README.md
