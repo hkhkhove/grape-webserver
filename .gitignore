@@ -1,5 +1,6 @@
 __pycache__/
 .vscode/
 tasks/
-grape/model_parameters/
+model_parameters/
 webserver/target/
+*.tar

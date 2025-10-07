@@ -95,17 +95,19 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center py-10 px-4">
-    <div class="w-full max-w-3xl bg-white rounded-lg shadow-xl p-8">
-      <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Generation Results</h1>
+  <div class="flex flex-col items-center py-6 px-4">
+    <div class="w-full max-w-3xl rounded-lg shadow-xl p-8 bg-white dark:bg-gray-900">
+      <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-400 mb-6">
+        Generation Results
+      </h1>
 
-      <div v-if="isLoading" class="text-center text-gray-500">
+      <div v-if="isLoading" class="text-center text-gray-500 dark:text-gray-400">
         <p>Loading task details...</p>
       </div>
       <!-- 查询结果失败 -->
       <div
         v-else-if="fetchError"
-        class="p-4 rounded-md bg-red-100 border border-red-400 text-red-800"
+        class="p-4 rounded-lg bg-red-100 border border-red-400 text-red-800"
       >
         <p>Error {{ fetchError }}</p>
       </div>
@@ -113,7 +115,7 @@ onUnmounted(() => {
       <div v-else-if="taskResponse">
         <div class="grid grid-cols-2 gap-4 mb-6 border-b border-gray-300 pb-4">
           <div>
-            <strong class="text-gray-600">Status: </strong>
+            <strong class="text-gray-600 dark:text-gray-400">Status: </strong>
             <span
               class="font-semibold"
               :class="{
@@ -125,16 +127,16 @@ onUnmounted(() => {
               >{{ taskResponse.type }}</span
             >
           </div>
-          <div>
-            <strong class="text-gray-600">Submitted: </strong>
+          <div class="dark:text-gray-500">
+            <strong class="text-gray-600 dark:text-gray-400">Submitted: </strong>
             {{ formatDate(taskResponse.data.upload_time) }}
           </div>
-          <div>
-            <strong class="text-gray-600">Started: </strong>
+          <div class="dark:text-gray-500">
+            <strong class="text-gray-600 dark:text-gray-400">Started: </strong>
             {{ formatDate(taskResponse.data.start_time) }}
           </div>
-          <div>
-            <strong class="text-gray-600">Finished: </strong>
+          <div class="dark:text-gray-500">
+            <strong class="text-gray-600 dark:text-gray-400">Finished: </strong>
             {{ formatDate(taskResponse.data.end_time) }}
           </div>
         </div>
@@ -178,7 +180,7 @@ onUnmounted(() => {
         <!-- 任务失败 -->
         <div
           v-else-if="taskResponse.type === 'Failed'"
-          class="p-4 rounded-md bg-red-100 border border-red-400 text-red-800"
+          class="p-4 rounded-lg bg-red-100 border border-red-400 text-red-800"
         >
           <p>
             <strong>Task Failed:</strong>
@@ -187,13 +189,15 @@ onUnmounted(() => {
         </div>
         <!-- 任务成功 -->
         <div v-else-if="taskResponse.type === 'Completed'">
-          <h2 class="text-xl font-semibold text-gray-700 mb-4">Generated Sequences</h2>
+          <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-400 mb-4">
+            Generated Sequences
+          </h2>
           <!-- 展示生成的序列 -->
           <textarea
             :value="resultSequences"
             readonly
             rows="10"
-            class="w-full min-h-60 p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 transition font-mono"
+            class="w-full min-h-60 p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:border-gray-800 dark:text-gray-400 dark:bg-gray-800 transition font-mono"
           ></textarea>
           <div class="mt-4 text-center">
             <button

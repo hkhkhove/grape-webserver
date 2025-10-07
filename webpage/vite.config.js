@@ -21,7 +21,7 @@ export default defineConfig({
     proxy: {
       // 将所有 /api 的请求代理到后端服务器
       '/api': {
-        target: 'http://127.0.0.1:12358', // 你的 Axum 服务器地址
+        target: 'http://127.0.0.1:12358',
         changeOrigin: true,
       },
     },

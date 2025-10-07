@@ -22,9 +22,16 @@ const defaultState = {
 const targetOptions = ['RBD', 'CD3e', 'C-MYC']
 const modelOptions = ['RNA-FM']
 
+const MAX_SEED_SEQUENCES = 10000
+
 const validationError = computed(() => {
-  if (!seedSequence.value.trim()) return ''
+  if (!seedSequence.value.trim()) return '' //还没有输入的时候，不显示错误（显示空字符串）
+
   const lines = seedSequence.value.split('\n').filter((line) => line.trim() !== '')
+
+  if (lines.length > MAX_SEED_SEQUENCES) {
+    return `Maximum ${MAX_SEED_SEQUENCES} sequences allowed. Current: ${lines.length}`
+  }
   for (const [i, line] of lines.entries()) {
     if (!/^[ACGU]+$/i.test(line)) {
       return `Error on line ${i + 1}: Sequence can only contain A, C, G, U characters.`
@@ -38,56 +45,56 @@ const validationError = computed(() => {
 
 // 填充示例数据
 function handleExample() {
-  seedSequence.value = `AUCAGUUGGUAGCAUGAUCG
-GAGUCGGUUCAGCCGUAGUC
-UACUGGAUCGGAAGUAGGCU
-CGGCUGACCGAUGCAACGUG
-UCUAGGCUUAUGGCACAUCA
-GCACUAGCCCGGAACUUCGU
-CGGCGACAUCAGCCGUCAGC
-GAGGCAGGUACAUACGUACU
-GUGCGCUCGCGUUAGGACGU
-GCACGUAGGCAUCACAGACA
-UCGAAGGCAGCUAGGUUCAC
-UGUACUAGCCGACCGGUAGU
-UCGCAGGCAUCAAUCAGACA
-GCACGUCGUAGGCCUCACGA
-GGAUGGCAAGCUGCUGCGGA
-GUCCGGGAGUGCGUCAGAAU
-ACCUGCGGAACGAACUGAAG
-UCGAGCGGCUAAGCUAGAUA
-GAGCGAGUGCGCACGCUCGA
-UCUGGUAAGUAGGCUACGUG
-CGUGCCGUAUGGACGCGGCG
-UGCGAGCCAUCACUCGAGCU
-GCGGUGCUGAAGACGAAUGA
-GCUAAGCUAGAGGAAUCCGA
-AGCCGUUGAGUCAGUCUCGA
-GACGGCCCAUCGUCGUAGCA
-UGACCAACGGAUACUGAAUG
-UCCGCACGGCACCUCAUUCG
-GCUGCGGCACACGGCAUCGG
-GCGGCGUUGCAACGCGAUCA
-GAUGGCGUAGGCAUACGUAG
-UAAGCUGAGCCGCUAGUUGG
-CGGCUGACUGGCCUAACUGC
-GAGCGUCGGCUGACUCCGAA
-AGUGCAGUAAGCAUAGCGUC
-ACGACUGGCUAUCAGUACGU
-UCACGGCACCACCGAUCGUC
-GUGGCGGUCGUAAUCGCGCA
-AAGUGACGGAACUGUGCAUG
-ACGCCGGCUUGUUGGGCAUC
-ACUGAGGUCGAGGACAUCCG
-ACCGGCACCUCAGCGACGGA
-CACGGUCAUGGCCUCCAUCA
-CGCUGACGACACGCGGACUC
-GCAUGCGGCACCGGCAUGCC
-ACGCUCCGACUGCAAUGCAC
-CAGAGCUAGCUGCAGCUGCA
-GGAAGGCGAAUAAUGCACUC
-AGCGAUGAUGGAGCUGUCAU
-CCAUCGACUGGCAGGUACGG`
+  seedSequence.value = `UACUCAUGAGCAUGAGUACC
+UCGAUGGCGCGCUGUCGCUC
+CCGUCGAUACCGACGGCCAG
+CUCCCCGGCGGCGGGGAGCC
+AGGCGAUCAGGCGCCCAACG
+ACUCGGUCGACCGGGCUACA
+AUCCUACGGCUGGGCUCUUU
+CGUCUGUGACUUGGUGUUCC
+AAGUAAUGUUACUCCGCGUU
+GACCCUAGCGUGUCACUCGU
+UAGUAGUAAUGCUGGCAGCA
+UGCAUCGGAAUGCUGGACGA
+CGCCACAAGAUCGUGACUGA
+CCUUCGCUACAGUGGUUUUG
+UCGCUGUAGACAGCGUCAGC
+AAGUCGAAAUCAAUUUCGUU
+CACCGCACCAACGCGCCCGU
+AAUCGAUCAAUGGCGUGACU
+ACGGCCUCACACGGUCUACG
+CGGCUGCGUAAGCUGCUCAU
+GCUGGGACUCACAAAAAUCU
+GUGUCGCUAGUCUAUGUGUU
+GCUCUGUGUUGACGAACAUC
+CCAACAUGUGCCAAGCAUGU
+CAUGUAGCAAGCCUCUACAU
+UCCUCUUCCAUCCAGCGAGG
+GCGUGGCGUCACCUGCUAUC
+UACGAGGGGUGACCUUUCAG
+UCCUGUUAACCGUAACGAGA
+UUCUGCCUCCACCGGCUGUC
+GUGUGCGUAGAGUCACGCAG
+CCAGCUUCAUCCUAAGUCGU
+GAUACCGUGCUGACGCUAGC
+CAUCGCUGUAGCUAGCGGAC
+UGACGAUUGCAACUCGAUAG
+GCUUCGGCCUCUAGCCAAAC
+CGACCAAAUGGCUUGACCGG
+GGCUCACGAUUCUGCGUCAU
+CGUCGGAUGGUCCGGCAUGG
+UUGUGCCGCAGGCAUGUAUA
+UGACCUUCGGGCCGGAGGUG
+ACGAGCUUGGUGUUAAGUAG
+CUCGAUAUAUAAGCAUCGCU
+AAUCUGGUUAAUGUAUCGGG
+UGCACCCGUCGCUGGAUACU
+GCCGGCCCUACCUAGUCGAA
+AGCACGGCCGCAGUCGUGCA
+GAUCUGAUCUAACGGCUCCU
+AAUGUCAAUUUGGCGGCGUU
+AUAUCUAAUCCGAAGUCAGC`
 }
 
 // 重置表单
@@ -139,10 +146,10 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="flex flex-col items-center py-10 px-4">
-    <div class="w-full max-w-3xl bg-white rounded-lg shadow-xl p-8">
+  <div class="flex flex-col items-center py-6 px-4">
+    <div class="w-full max-w-3xl bg-white rounded-lg shadow-xl p-8 dark:bg-gray-900">
       <!-- 标题 -->
-      <h1 class="text-4xl font-bold text-center text-gray-800 mb-2">GRAPE</h1>
+      <h1 class="text-4xl font-bold text-center text-gray-800 mb-2 dark:text-gray-400">GRAPE</h1>
       <p class="text-center text-gray-500 mb-8">
         Generator of RNA Aptamers Powered by Activity-guided Evolution
       </p>
@@ -151,14 +158,16 @@ async function handleSubmit() {
       <form @submit.prevent="handleSubmit">
         <!-- 种子序列输入框 -->
         <div class="mb-6">
-          <label for="seed-sequence" class="block text-lg font-medium text-gray-700 mb-2"
+          <label
+            for="seed-sequence"
+            class="block text-lg font-medium text-gray-700 dark:text-gray-400 mb-2"
             >Seed Sequences</label
           >
           <textarea
             id="seed-sequence"
             v-model="seedSequence"
             rows="10"
-            class="w-full min-h-60 p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 transition font-mono"
+            class="w-full min-h-60 p-3 bg-gray-50 border rounded-lg shadow-sm transition font-mono focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:border-gray-800 dark:text-gray-400 dark:bg-gray-800"
             :class="validationError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'"
             placeholder="Enter your seed sequences here, one per line (20 bases long, RNA only)..."
             spellcheck="false"
@@ -171,29 +180,39 @@ async function handleSubmit() {
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <!-- Target 下拉框 -->
           <div>
-            <label for="target" class="block text-lg font-medium text-gray-700 mb-2">Target</label>
+            <label
+              for="target"
+              class="block text-lg font-medium text-gray-700 dark:text-gray-400 mb-2"
+              >Target</label
+            >
             <select
               id="target"
               v-model="target"
-              class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 transition"
+              class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:border-gray-800 dark:text-gray-400 transition"
             >
               <option v-for="opt in targetOptions" :key="opt" :value="opt">{{ opt }}</option>
             </select>
           </div>
           <!-- Model 下拉框 -->
           <div>
-            <label for="model" class="block text-lg font-medium text-gray-700 mb-2">Model</label>
+            <label
+              for="model"
+              class="block text-lg font-medium text-gray-700 dark:text-gray-400 mb-2"
+              >Model</label
+            >
             <select
               id="model"
               v-model="model"
-              class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 transition"
+              class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:border-gray-800 dark:text-gray-400 transition"
             >
               <option v-for="opt in modelOptions" :key="opt" :value="opt">w/ {{ opt }}</option>
             </select>
           </div>
           <!-- 数量输入 -->
           <div>
-            <label for="count" class="block text-lg font-medium text-gray-700 mb-2"
+            <label
+              for="count"
+              class="block text-lg font-medium text-gray-700 dark:text-gray-400 mb-2"
               >Generated Sequences</label
             >
             <input
@@ -202,7 +221,7 @@ async function handleSubmit() {
               v-model="count"
               min="1"
               max="10000"
-              class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 transition"
+              class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:border-gray-800 dark:text-gray-400 transition"
             />
           </div>
         </div>
@@ -211,14 +230,14 @@ async function handleSubmit() {
           <button
             type="button"
             @click="handleExample"
-            class="px-8 py-3 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition"
+            class="w-32 px-8 py-3 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition"
           >
             Example
           </button>
           <button
             type="submit"
             :disabled="isLoading || validationError"
-            class="px-8 py-3 bg-violet-600 text-white font-semibold rounded-lg shadow-md hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-opacity-75 transition disabled:bg-violet-300 disabled:cursor-not-allowed"
+            class="w-32 px-8 py-3 bg-violet-600 text-white font-semibold rounded-lg shadow-md hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-opacity-75 transition disabled:bg-violet-300 disabled:cursor-not-allowed"
           >
             <span v-if="isLoading">Submitting...</span>
             <span v-else>Submit</span>
@@ -226,7 +245,7 @@ async function handleSubmit() {
           <button
             type="button"
             @click="handleReset"
-            class="px-8 py-3 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition"
+            class="w-32 px-8 py-3 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition"
           >
             Reset
           </button>
@@ -236,15 +255,15 @@ async function handleSubmit() {
       <!-- 提交错误显示 -->
       <div
         v-if="submissionError"
-        class="mt-8 p-4 rounded-md bg-red-100 border border-red-400 text-red-800"
+        class="mt-8 p-4 rounded-lg bg-red-100 border border-red-400 text-red-800"
       >
         <p>Error {{ submissionError }}</p>
       </div>
-      <div class="mt-8 text-center">
+      <!-- <div class="mt-8 text-center">
         <router-link to="/" class="text-violet-600 hover:text-violet-800 font-semibold">
           Back to Home
         </router-link>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

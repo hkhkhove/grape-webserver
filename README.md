@@ -54,7 +54,13 @@ You can also run the webserver using Docker for easier deployment:
 
 ```bash
 docker build -t grape-webserver .
-docker run -d --name grape-webserver -p 127.0.0.1:12358:12358 grape-webserver
+docker run -d \
+  --name grape-webserver \
+  --restart unless-stopped \
+  -p 127.0.0.1:12358:12358 \
+  -v <MODEL_PARAMETERS_DIR>:/app/model_parameters \
+  -v <TASKS_DIR>:/app/tasks \
+  grape-webserver
 ```
 
 If you need to change the startup parameters (such as address, or maximum concurrent tasks), you can modify the CMD section in the Dockerfile to fit your requirements.

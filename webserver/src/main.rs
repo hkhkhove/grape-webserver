@@ -78,6 +78,17 @@ async fn upload_task(
         .get("task_name")
         .ok_or((StatusCode::BAD_REQUEST, "task_name is required".to_string()))?
         .clone();
+    let seed_seqs = form_data
+        .get("seed_seqs")
+        .ok_or((StatusCode::BAD_REQUEST, "seed_seqs is required".to_string()))?
+        .clone();
+    let gen_num = form_data
+        .get("gen_num")
+        .ok_or((StatusCode::BAD_REQUEST, "gen_num is required".to_string()))?
+        .clone();
+
+    validate_seed_sequences(&seed_seqs)?;
+    validate_gen_num(&gen_num)?;
 
     let home = Config::home();
 
@@ -151,6 +162,75 @@ async fn upload_task(
         task_id,
         message: "Task created successfully and added to the queue.".to_string(),
     }))
+}
+
+fn validate_seed_sequences(seed_seqs: &str) -> Result<(), (StatusCode, String)> {
+    const MAX_SEQUENCES: usize = 10000;
+
+    let lines: Vec<&str> = seed_seqs
+        .lines()
+        .map(|line| line.trim())
+        .filter(|line| !line.is_empty())
+        .collect();
+
+    // 检查数量限制
+    if lines.len() > MAX_SEQUENCES {
+        return Err((
+            StatusCode::BAD_REQUEST,
+            format!(
+                "Maximum {} sequences allowed. Got: {}",
+                MAX_SEQUENCES,
+                lines.len()
+            ),
+        ));
+    }
+
+    // 检查每个序列
+    for (i, line) in lines.iter().enumerate() {
+        // 只允许 ACGU 字符
+        if !line
+            .chars()
+            .all(|c| matches!(c.to_ascii_uppercase(), 'A' | 'C' | 'G' | 'U'))
+        {
+            return Err((
+                StatusCode::BAD_REQUEST,
+                format!(
+                    "Line {}: Invalid characters. Only A, C, G, U allowed",
+                    i + 1
+                ),
+            ));
+        }
+
+        // 长度必须为 20
+        if line.len() != 20 {
+            return Err((
+                StatusCode::BAD_REQUEST,
+                format!(
+                    "Line {}: Sequence must be 20 characters long. Got: {}",
+                    i + 1,
+                    line.len()
+                ),
+            ));
+        }
+    }
+
+    Ok(())
+}
+
+fn validate_gen_num(gen_num_str: &str) -> Result<(), (StatusCode, String)> {
+    let gen_num = gen_num_str.parse::<u32>().map_err(|_| {
+        (
+            StatusCode::BAD_REQUEST,
+            "gen_num must be a valid number".to_string(),
+        )
+    })?;
+    if gen_num < 1 || gen_num > 10000 {
+        return Err((
+            StatusCode::BAD_REQUEST,
+            "Generated sequences count must be between 1 and 10000".to_string(),
+        ));
+    }
+    Ok(())
 }
 
 // 获取特定任务状态
@@ -374,7 +454,7 @@ async fn main() {
         .nest("/api", api_routes)
         .nest_service(
             "/favicon.ico",
-            ServeFile::new(home.join("webpage").join("dist").join("favicon.ico")),
+            ServeFile::new(home.join("webpage").join("dist").join("GRAPE.svg")),
         )
         .nest_service(
             "/assets",

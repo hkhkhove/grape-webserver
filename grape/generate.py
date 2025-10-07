@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import random
 import os
+from pathlib import Path
 import torch
 import fm
 import numpy as np
@@ -9,7 +10,7 @@ from .model import FullModel
 
 torch.set_grad_enabled(False)
 
-file_dir = os.path.abspath(os.path.dirname(__file__))
+project_dir = Path(__file__).parents[1]
 
 
 # GRAPE generation method
@@ -61,7 +62,7 @@ def rna_to_onehot(seq):
 
 
 def run_rna_fm(rna_fm_inputs, device, batch_size=100):
-    rna_fm_model_path = os.path.join(file_dir, "model_parameters", "RNA-FM_pretrained.pth")
+    rna_fm_model_path = os.path.join(project_dir, "model_parameters", "RNA-FM_pretrained.pth")
     if os.path.exists(rna_fm_model_path):
         rna_fm_model, alphabet = fm.pretrained.rna_fm_t12(model_location=rna_fm_model_path)
     else:
@@ -129,7 +130,7 @@ def generate(
         n_heads=2,
         dropout=0.05,
     )
-    model_path = os.path.join(file_dir, "model_parameters", f"{model_name}.model")
+    model_path = os.path.join(project_dir, "model_parameters", f"{model_name}.model")
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.to(device)
     model.eval()
