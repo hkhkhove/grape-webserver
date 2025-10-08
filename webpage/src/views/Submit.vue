@@ -117,7 +117,7 @@ async function handleSubmit() {
   const taskId = nanoid()
 
   formData.append('task_id', taskId)
-  formData.append('task_name', 'GRAPE')
+  formData.append('task_name', 'GRAPE-LM')
   formData.append('seed_seqs', seedSequence.value)
   formData.append('target', target.value)
   formData.append('model', model.value)
@@ -149,9 +149,9 @@ async function handleSubmit() {
   <div class="flex flex-col items-center py-6 px-4">
     <div class="w-full max-w-3xl bg-white rounded-lg shadow-xl p-8 dark:bg-gray-900">
       <!-- 标题 -->
-      <h1 class="text-4xl font-bold text-center text-gray-800 mb-2 dark:text-gray-400">GRAPE</h1>
+      <h1 class="text-4xl font-bold text-center text-gray-800 mb-2 dark:text-gray-400">GRAPE-LM</h1>
       <p class="text-center text-gray-500 mb-8">
-        Generator of RNA Aptamers Powered by Activity-guided Evolution
+        Generator of RNA Aptamers Powered by activity-guided Evolution and Language Model
       </p>
 
       <!-- 表单 -->
@@ -230,14 +230,14 @@ async function handleSubmit() {
           <button
             type="button"
             @click="handleExample"
-            class="w-32 px-8 py-3 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition"
+            class="w-30 py-3 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition"
           >
             Example
           </button>
           <button
             type="submit"
             :disabled="isLoading || validationError"
-            class="w-32 px-8 py-3 bg-violet-600 text-white font-semibold rounded-lg shadow-md hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-opacity-75 transition disabled:bg-violet-300 disabled:cursor-not-allowed"
+            class="px-8 py-3 bg-violet-600 text-white font-semibold rounded-lg shadow-md hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-opacity-75 transition disabled:bg-violet-300 disabled:cursor-not-allowed"
           >
             <span v-if="isLoading">Submitting...</span>
             <span v-else>Submit</span>
@@ -245,7 +245,7 @@ async function handleSubmit() {
           <button
             type="button"
             @click="handleReset"
-            class="w-32 px-8 py-3 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition"
+            class="w-30 py-3 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition"
           >
             Reset
           </button>

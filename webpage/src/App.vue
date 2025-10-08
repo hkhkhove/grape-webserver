@@ -7,9 +7,7 @@ const openContact = ref(false)
 <template>
   <div class="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-800">
     <header>
-      <nav
-        class="min-w-sm bg-white border border-gray-200 shadow-sm dark:bg-gray-900 dark:border-gray-800 dark:text-gray-400"
-      >
+      <nav class="min-w-sm bg-white shadow-sm dark:bg-gray-900 dark:text-gray-400">
         <div class="max-w-7xl min-w-sm flex flex-wrap items-center justify-between mx-auto p-4">
           <!-- logo -->
           <router-link to="/" class="flex items-center space-x-3">
@@ -101,7 +99,7 @@ const openContact = ref(false)
                 </g>
               </g>
             </svg>
-            <span class="text-2xl font-semibold">GRAPE</span>
+            <span class="text-2xl font-semibold">GRAPE-LM</span>
           </router-link>
 
           <!-- menu -->

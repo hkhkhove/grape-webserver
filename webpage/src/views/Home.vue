@@ -5,9 +5,9 @@ import frameworkImage from '@/assets/images/grape-framework.png'
   <div class="flex flex-col items-center py-6 px-4">
     <div class="w-full max-w-3xl bg-white rounded-lg shadow-xl p-8 dark:bg-gray-900">
       <!-- 标题 -->
-      <h1 class="text-4xl font-bold text-center text-gray-800 mb-2 dark:text-gray-400">GRAPE</h1>
+      <h1 class="text-4xl font-bold text-center text-gray-800 mb-2 dark:text-gray-400">GRAPE-LM</h1>
       <p class="text-center text-gray-500 mb-8">
-        Generator of RNA Aptamers Powered by Activity-guided Evolution
+        Generator of RNA Aptamers Powered by activity-guided Evolution and Language Model
       </p>
 
       <!-- 方法介绍 -->
@@ -15,24 +15,22 @@ import frameworkImage from '@/assets/images/grape-framework.png'
         <h2 class="text-2xl font-semibold text-gray-800 mb-4 dark:text-gray-400">Overview</h2>
         <div class="prose max-w-none text-gray-700 dark:text-gray-500">
           <p class="mb-4">
-            GRAPE<sup class="font-medium">1</sup> is a novel AI-driven framework designed for the
+            GRAPE-LM<sup class="font-medium">1</sup> is a novel AI-driven framework designed for the
             rapid evolution of RNA aptamers. Unlike traditional approaches, which require
-            labor-intensive, multi-round screening, GRAPE enables one-round evolution by integrating
-            a Transformer-based conditional autoencoder with nucleic acid language models<sup
-              class="font-medium"
-              >2,3</sup
-            >. The framework is guided by CRISPR/Cas-based aptamer screening data obtained from
-            biologically relevant intracellular environments.
+            labor-intensive, multi-round screening, GRAPE-LM enables one-round evolution by
+            integrating a Transformer-based conditional autoencoder with nucleic acid language
+            models<sup class="font-medium">2,3</sup>. The framework is guided by CRISPR/Cas-based
+            aptamer screening data obtained from biologically relevant intracellular environments.
           </p>
           <div class="mb-4">
             <div class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800">
               <img
                 :src="frameworkImage"
-                alt="GRAPE Framework Diagram"
+                alt="GRAPE-LM Framework Diagram"
                 class="w-full h-auto rounded-lg shadow-sm"
               />
               <p class="text-sm text-gray-500 mt-2 text-center italic">
-                Overview of the GRAPE framework for RNA aptamer evolution.
+                Overview of the GRAPE-LM framework for RNA aptamer evolution.
               </p>
             </div>
           </div>
@@ -62,7 +60,7 @@ import frameworkImage from '@/assets/images/grape-framework.png'
               <p class="font-medium">
                 <span class="font-bold">1.</span> Jun Zhang, Ju Zhang, Shaoxuan Tang, Chuancheng
                 Liu, Yushan Cai, Hao Zeng, Xiangjie Meng, Yang Zhang, Yu Wang. One Round Evolution
-                of RNA Aptamers with GRAPE.
+                of RNA Aptamers with GRAPE-LM.
               </p>
               <p class="text-gray-600 italic dark:text-gray-600">(Submitted).</p>
             </div>
