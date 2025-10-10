@@ -1,8 +1,8 @@
-# GRAPE Webserver
+# GRAPE-LM Webserver
 
-This repository provides the web server implementation for the **GRAPE** (Generator of RNA Aptamers Powered by Activity-guided Evolution) method.
+This repository provides the web server implementation for the **GRAPE-LM** (Generator of RNA Aptamers Powered by activity-guided Evolution and Language Model) method.
 
-🌐 **Try GRAPE online at: [https://grape.bioailab.net](https://grape.bioailab.net)**
+🌐 **Try GRAPE-LM online at: [https://grape.bioailab.net](https://grape.bioailab.net)**
 
 ## How to Run
 
@@ -58,8 +58,8 @@ docker run -d \
   --name grape-webserver \
   --restart unless-stopped \
   -p 127.0.0.1:12358:12358 \
-  -v <MODEL_PARAMETERS_DIR>:/app/model_parameters \
-  -v <TASKS_DIR>:/app/tasks \
+  -v <model_parameters_dir>:/app/model_parameters \
+  -v <tasks_dir>:/app/tasks \
   grape-webserver
 ```
 
