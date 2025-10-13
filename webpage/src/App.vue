@@ -103,19 +103,15 @@ const openContact = ref(false)
           </router-link>
 
           <!-- menu -->
-          <div class="w-auto">
-            <ul class="flex flex-row font-medium p-0 mt-0 space-x-4">
+          <div class="w-auto text-gray-700 dark:text-gray-400">
+            <ul class="flex flex-row font-medium p-0 mt-0 space-x-10">
               <li>
-                <router-link
-                  to="/"
-                  class="block py-0 px-3 text-gray-700 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400"
+                <router-link to="/" class="hover:text-blue-700 dark:hover:text-blue-400"
                   >Home</router-link
                 >
               </li>
               <li>
-                <router-link
-                  to="/submit"
-                  class="block py-0 px-3 text-gray-700 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400"
+                <router-link to="/submit" class="hover:text-blue-700 dark:hover:text-blue-400"
                   >Web Server</router-link
                 >
               </li>
@@ -125,13 +121,13 @@ const openContact = ref(false)
                 @mouseleave="openContact = false"
               >
                 <button
-                  class="flex items-center justify-between w-full py-0 px-3 text-gray-700 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400"
+                  class="flex items-center space-x-2 hover:text-blue-700 dark:hover:text-blue-400"
                 >
-                  Contact Us
+                  <span>Contact Us</span>
                   <svg
-                    class="w-2.5 h-2.5 ms-2.5"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
+                    class="w-2.5 h-2.5"
                     viewBox="0 0 10 6"
                   >
                     <path
@@ -151,7 +147,7 @@ const openContact = ref(false)
                   <div
                     class="mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:divide-gray-700"
                   >
-                    <ul class="block py-2 text-sm text-center text-gray-700 dark:text-gray-400">
+                    <ul class="py-2 text-sm text-center text-gray-700 dark:text-gray-400">
                       <li>
                         <a
                           href="mailto:junzhang@szu.edu.cn"
@@ -173,6 +169,29 @@ const openContact = ref(false)
                     </ul>
                   </div>
                 </div>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/tansaox2008123/GRAPE-LM"
+                  class="flex items-center space-x-2 hover:text-blue-700 dark:hover:text-blue-400"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>Source Code</span>
+                  <svg
+                    class="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"
+                    />
+                    <path
+                      d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"
+                    />
+                  </svg>
+                </a>
               </li>
             </ul>
           </div>

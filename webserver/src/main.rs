@@ -33,7 +33,7 @@ struct AppState {
 // API处理函数
 async fn root() -> Json<serde_json::Value> {
     Json(serde_json::json!({
-        "message": "GRAPE API Server",
+        "message": "GRAPE-LM API Server",
         "version": "0.1.0"
     }))
 }
@@ -388,7 +388,7 @@ async fn task_dispatcher(
 
 #[tokio::main]
 async fn main() {
-    println!("Usage: grape-webserver <work_dir> <address> <max_workers>");
+    println!("Usage: grape-lm-webserver <work_dir> <address> <max_workers>");
     let home = env::args()
         .nth(1)
         .map(|arg| PathBuf::from(arg))
@@ -454,7 +454,7 @@ async fn main() {
         .nest("/api", api_routes)
         .nest_service(
             "/favicon.ico",
-            ServeFile::new(home.join("webpage").join("dist").join("GRAPE.svg")),
+            ServeFile::new(home.join("webpage").join("dist").join("grape-lm.ico")),
         )
         .nest_service(
             "/assets",

@@ -13,7 +13,7 @@ torch.set_grad_enabled(False)
 project_dir = Path(__file__).parents[1]
 
 
-# GRAPE generation method
+# GRAPE-LM generation method
 def greedy_decode_guidance(model, input_src, max_len, start_symbol, is_noise):
     if is_noise:
         noise = gaussian_noise(input_src.size(), mean=0.0, std=0.1)

@@ -2,7 +2,7 @@
 
 This repository provides the web server implementation for the **GRAPE-LM** (Generator of RNA Aptamers Powered by activity-guided Evolution and Language Model) method.
 
-🌐 **Try GRAPE-LM online at: [https://grape.bioailab.net](https://grape.bioailab.net)**
+🌐 **Try GRAPE-LM online at: [https://grape-lm.bioailab.net](https://grape-lm.bioailab.net)**
 
 ## How to Run
 
@@ -40,7 +40,7 @@ This repository provides the web server implementation for the **GRAPE-LM** (Gen
 4. **Run the webserver:**
    From the `project root` directory, execute:
     ```bash
-    ./webserver/target/release/grape-webserver <project_dir> <address:port> <max_concurrent_tasks>
+    ./webserver/target/release/grape-lm-webserver <project_dir> <address:port> <max_concurrent_tasks>
     ```
     - `<project_dir>`: Path to your GRAPE project directory
     - `<address:port>`: Address and port to bind (e.g., `127.0.0.1:12358`)
@@ -53,14 +53,14 @@ This repository provides the web server implementation for the **GRAPE-LM** (Gen
 You can also run the webserver using Docker for easier deployment:
 
 ```bash
-docker build -t grape-webserver .
+docker build -t grape-lm-webserver .
 docker run -d \
-  --name grape-webserver \
+  --name grape-lm-webserver \
   --restart unless-stopped \
   -p 127.0.0.1:12358:12358 \
   -v <model_parameters_dir>:/app/model_parameters \
   -v <tasks_dir>:/app/tasks \
-  grape-webserver
+  grape-lm-webserver
 ```
 
 If you need to change the startup parameters (such as address, or maximum concurrent tasks), you can modify the CMD section in the Dockerfile to fit your requirements.

@@ -63,7 +63,7 @@ pub fn run_grape(params: HashMap<String, String>) -> PyResult<()> {
         //将项目总路径添加到python模块搜索路径
         path_list.insert(0, home.as_os_str())?;
 
-        let module = py.import("grape.generate")?;
+        let module = py.import("grape-lm.generate")?;
 
         module.call_method("generate", (params,), None)?;
 

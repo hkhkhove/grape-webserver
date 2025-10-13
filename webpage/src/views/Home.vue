@@ -1,5 +1,5 @@
 <script setup>
-import frameworkImage from '@/assets/images/grape-framework.png'
+import frameworkImage from '@/assets/images/grape-lm-framework.png'
 </script>
 <template>
   <div class="flex flex-col items-center py-6 px-4">
@@ -14,7 +14,7 @@ import frameworkImage from '@/assets/images/grape-framework.png'
       <div class="mb-4">
         <h2 class="text-2xl font-semibold text-gray-800 mb-4 dark:text-gray-400">Overview</h2>
         <div class="prose max-w-none text-gray-700 dark:text-gray-500">
-          <p class="mb-4">
+          <p class="mb-4 text-justify">
             GRAPE-LM<sup class="font-medium">1</sup> is a novel AI-driven framework designed for the
             rapid evolution of RNA aptamers. Unlike traditional approaches, which require
             labor-intensive, multi-round screening, GRAPE-LM enables one-round evolution by

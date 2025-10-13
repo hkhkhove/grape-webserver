@@ -26,7 +26,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 COPY webserver/ ./webserver/
-COPY grape/ ./grape/
+COPY grape-lm/ ./grape-lm/
 
 WORKDIR /app/webserver
 
@@ -43,12 +43,12 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY grape/ ./grape/
+COPY grape-lm/ ./grape-lm/
 
-COPY --from=backend-builder /app/webserver/target/release/grape-webserver /usr/local/bin/
+COPY --from=backend-builder /app/webserver/target/release/grape-lm-webserver /usr/local/bin/
 
 COPY --from=frontend-builder /app/webpage/dist/ ./webpage/dist/
 
 EXPOSE 12358
 
-CMD ["grape-webserver", "/app/", "0.0.0.0:12358", "2"]
+CMD ["grape-lm-webserver", "/app/", "0.0.0.0:12358", "2"]

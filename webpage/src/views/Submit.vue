@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid'
 const router = useRouter()
 
 const seedSequence = ref('')
-const target = ref('RBD')
+const target = ref('CD3e')
 const model = ref('RNA-FM')
 const count = ref(100)
 const isLoading = ref(false)
@@ -14,12 +14,12 @@ const submissionError = ref(null)
 
 const defaultState = {
   seedSequence: '',
-  target: 'RBD',
+  target: 'CD3e',
   model: 'RNA-FM',
   count: 100,
 }
 
-const targetOptions = ['RBD', 'CD3e', 'C-MYC']
+const targetOptions = ['CD3e', 'RBD', 'c-Myc']
 const modelOptions = ['RNA-FM']
 
 const MAX_SEED_SEQUENCES = 10000
