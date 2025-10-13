@@ -454,7 +454,7 @@ async fn main() {
         .nest("/api", api_routes)
         .nest_service(
             "/favicon.ico",
-            ServeFile::new(home.join("webpage").join("dist").join("grape-lm.ico")),
+            ServeFile::new(home.join("webpage").join("dist").join("favicon.ico")),
         )
         .nest_service(
             "/assets",

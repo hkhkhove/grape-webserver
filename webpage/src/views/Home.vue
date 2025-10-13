@@ -55,7 +55,7 @@ import frameworkImage from '@/assets/images/grape-lm-framework.png'
       <div class="mt-10">
         <h2 class="text-2xl font-semibold text-gray-800 mb-4 dark:text-gray-400">References</h2>
         <div class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800">
-          <div class="space-y-3 text-sm text-gray-700 dark:text-gray-500">
+          <div class="space-y-3 text-sm text-justify text-gray-700 dark:text-gray-500">
             <div class="border-l-4 border-violet-500 pl-4">
               <p class="font-medium">
                 <span class="font-bold">1.</span> Jun Zhang, Ju Zhang, Shaoxuan Tang, Chuancheng
