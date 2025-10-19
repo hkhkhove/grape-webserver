@@ -5,6 +5,7 @@ from pathlib import Path
 import torch
 import fm
 import numpy as np
+from itertools import combinations
 
 from .model import FullModel
 
@@ -94,13 +95,17 @@ def run_rna_fm(rna_fm_inputs, device, batch_size=100):
 def get_samples(seed_seqs, gen_num, device):
     seqs1 = []
     seqs2 = []
-    lines = seed_seqs.strip().splitlines()
+    seqs_list = seed_seqs.strip().splitlines()
 
-    for _ in range(gen_num):
-        i = random.randint(0, len(lines) - 1)
-        j = random.randint(0, len(lines) - 1)
-        seqs1.append(lines[i].split()[-1])
-        seqs2.append(lines[j].split()[-1])
+    pairs = list(combinations(range(len(seqs_list)), 2))
+    random.shuffle(pairs)
+    selected_pairs = pairs[:gen_num]
+
+    for i, j in selected_pairs:
+        seqs1.append(seqs_list[i])
+        seqs2.append(seqs_list[j])
+
+    assert len(seqs1) == gen_num and len(seqs2) == gen_num
 
     reps = run_rna_fm([(i, seq) for i, seq in enumerate(seqs1 + seqs2)], device)
     reps = standardization(reps)
@@ -117,7 +122,6 @@ def generate(
     seed_seqs = params["seed_seqs"].upper()
     output_file = params["output_file"]
     gen_num = int(params["gen_num"])
-
     device = torch.device("cpu")
     model_name = f"{target}_{llm}"
     model = FullModel(

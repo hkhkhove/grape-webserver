@@ -6,20 +6,25 @@ import { nanoid } from 'nanoid'
 const router = useRouter()
 
 const seedSequence = ref('')
-const target = ref('CD3e')
+const target = ref('CD3ε')
 const model = ref('RNA-FM')
-const count = ref(100)
+const genNum = ref('')
 const isLoading = ref(false)
 const submissionError = ref(null)
 
+const maxGenNum = computed(() => {
+  const seedNum = seedSequence.value.split('\n').filter((line) => line.trim() !== '').length
+  return Math.min((seedNum * (seedNum - 1)) / 2, 10000) // 生成数量上限为10000
+})
+
 const defaultState = {
   seedSequence: '',
-  target: 'CD3e',
+  target: 'CD3ε',
   model: 'RNA-FM',
-  count: 100,
+  genNum: '',
 }
 
-const targetOptions = ['CD3e', 'RBD', 'c-Myc']
+const targetOptions = ['CD3ε', 'RBD', 'c-Myc']
 const modelOptions = ['RNA-FM']
 
 const MAX_SEED_SEQUENCES = 10000
@@ -37,64 +42,120 @@ const validationError = computed(() => {
       return `Error on line ${i + 1}: Sequence can only contain A, C, G, U characters.`
     }
     if (line.length !== 20) {
-      return `Error on line ${i + 1}: Sequence must be 20 characters long.`
+      return `Error on line ${i + 1}: Sequence must be 20 bases long.`
     }
+  }
+  if (lines.length < 2) {
+    return 'At least 2 seed sequences are required.'
   }
   return null // 验证通过
 })
 
 // 填充示例数据
 function handleExample() {
-  seedSequence.value = `UACUCAUGAGCAUGAGUACC
-UCGAUGGCGCGCUGUCGCUC
-CCGUCGAUACCGACGGCCAG
-CUCCCCGGCGGCGGGGAGCC
-AGGCGAUCAGGCGCCCAACG
-ACUCGGUCGACCGGGCUACA
-AUCCUACGGCUGGGCUCUUU
-CGUCUGUGACUUGGUGUUCC
-AAGUAAUGUUACUCCGCGUU
-GACCCUAGCGUGUCACUCGU
-UAGUAGUAAUGCUGGCAGCA
-UGCAUCGGAAUGCUGGACGA
-CGCCACAAGAUCGUGACUGA
-CCUUCGCUACAGUGGUUUUG
-UCGCUGUAGACAGCGUCAGC
-AAGUCGAAAUCAAUUUCGUU
-CACCGCACCAACGCGCCCGU
-AAUCGAUCAAUGGCGUGACU
-ACGGCCUCACACGGUCUACG
-CGGCUGCGUAAGCUGCUCAU
-GCUGGGACUCACAAAAAUCU
-GUGUCGCUAGUCUAUGUGUU
-GCUCUGUGUUGACGAACAUC
-CCAACAUGUGCCAAGCAUGU
-CAUGUAGCAAGCCUCUACAU
-UCCUCUUCCAUCCAGCGAGG
-GCGUGGCGUCACCUGCUAUC
-UACGAGGGGUGACCUUUCAG
-UCCUGUUAACCGUAACGAGA
-UUCUGCCUCCACCGGCUGUC
-GUGUGCGUAGAGUCACGCAG
-CCAGCUUCAUCCUAAGUCGU
-GAUACCGUGCUGACGCUAGC
-CAUCGCUGUAGCUAGCGGAC
-UGACGAUUGCAACUCGAUAG
-GCUUCGGCCUCUAGCCAAAC
-CGACCAAAUGGCUUGACCGG
-GGCUCACGAUUCUGCGUCAU
-CGUCGGAUGGUCCGGCAUGG
-UUGUGCCGCAGGCAUGUAUA
-UGACCUUCGGGCCGGAGGUG
-ACGAGCUUGGUGUUAAGUAG
-CUCGAUAUAUAAGCAUCGCU
-AAUCUGGUUAAUGUAUCGGG
-UGCACCCGUCGCUGGAUACU
-GCCGGCCCUACCUAGUCGAA
-AGCACGGCCGCAGUCGUGCA
-GAUCUGAUCUAACGGCUCCU
-AAUGUCAAUUUGGCGGCGUU
-AUAUCUAAUCCGAAGUCAGC`
+  seedSequence.value = `UGCGACAAGCUUCGCUAUGG
+CGUCGACUGAAAUCCUCUUC
+GUACGACGUUCAUGUUUUUU
+CGGUGAGUGUGACUCAUGCG
+GGACUUAGUGCUGCCCGCCG
+AGAGCGGUAUAGCUAGGUGU
+CGGUGAGUGUGGCUCAUGUG
+UGCGACUAGCUUCGCUAUGG
+CGGUGAGUGUGGCUCAUGCA
+UGCGACAAGCUUCUCUAUGG
+AGACCGACGGCGACACAAGC
+UGCAACAAGCUUCGCUAUGG
+GGUCGUCGGGCGACCGGCCG
+CGGGCGCCACCGGCGCGCAG
+UGCGACAAGCUUCGCUAUGA
+AGCGGCGGGACGGACGCGGA
+CCCAGACCGGCGGCGCCGAG
+UGGACAACGACUGCGCUAUG
+UGGUCCCGGGCAGCCCGGCC
+ACGUCAAGUUUCCGCUAUGG
+CUGUGGGAUGUGACAUGCGG
+CCGGAUCCCUGCCCGAGACC
+UGCGUCGCGGCGCGACGGCG
+GUCGUCGGCGGCCGCGCAGG
+GUCGCCAGGGGACCGGCCGG
+AGGGUCGCCGGGGACGGCCG
+UCCGCUCCGAUACUCGCCUC
+GUGGCACGGGACGGCGCGGC
+GCGGCUGACCGGGACGCGGA
+CGCGUACAGUUCCCGCCGCU
+GUCGGCGGCGCUCCUCGGAC
+GUACGGUCCGCUCUCCUCGG
+CCAGCCGUCGGCGCGACCGG
+UCGUCGUGGCGCGGGCACGG
+CGGCAGGCCGCCUCGACGCC
+CCAUGAGUCACAUCUCUCAG
+CGGUCGACCGACGGGGCGCA
+UAAUGCGUGGCGCGAGGCGU
+CGCUAGUCUGCGCGCGAGGC
+CGCCGCCGGCCGCCGACAUA
+AUGCGUCGGCCCGACUUGGC
+GCCGGCCGCGCGACGCGCUC
+UUCUGGCGCGUGGCGCUCGC
+CCCGGCCACCGAGCGCGCUG
+CGGCGACUUCGACGGGCCAC
+UCGGCGGCGCCAGGUCACGG
+GGCAACCGGCGUGCGCCAGC
+CUCUGCGCCGCAUCGGUCCG
+CCCUCGGGCCCCCGGUGGGA
+GCGCGGUCCGGUGGGCGCCU
+GCCGCCGUCGUGGCGUCCCG
+CGGGCUUCCCGGCAGCCCAG
+CGGAGGCCGCCGGCGCGAGU
+CCUGCGCGCGGUAGGUCCGA
+UCCGCCCUUCGGUCGUACCU
+AUACGCCCUGUCGCUCACCG
+UCGGCUGACUGCCGGUGGGU
+CUCGCGUGCUGCCGGUUGAG
+CCCGGCGCCGCCGGUCUGCC
+UCAGCGGCGCCUCCUCGACC
+CCGCGUCGGAGGAGGCUGGC
+UCCGCCCGUCGGCUACUUCG
+UCCGCCGCAGGGCGUACGGC
+UCGCGACGCCACCCACCGGA
+GCCCGCCUGUGCGUGCGACG
+UCGGUCCCGGCGGCGGCGAC
+GUUUCGGGGGUGGUGUCGCG
+UCAGCCUCGGCGCUGUCCUG
+CGGUCCGCCCAUCGGCAGGC
+CCGGGAGUCGCGCCUAGGCU
+CCAGGUCGUCGGCCGCCGGA
+GGCCGGACCGAGCGGGCCGC
+GCGGGCCCCCUCUGUGGCCA
+CGGCGCUUGGCAUCCGGCCG
+CGGUUCCGGCGGCCGUCGAU
+CGCGGUCACGCGGCGCGACC
+GGUGGGUGGCUUCUUGCCGA
+ACGGUGGUGGCGUUCGUCGU
+GCGCGCGGCGGGUACCCGGU
+CGCCGCGCGCGACGUUCUGC
+GAGCCCGGUGCCUGUCGUCG
+CGCCGGAGAGCGGGCCUCGA
+UCGUGCCCCGGCGCUGGGAC
+CGGUCCGCGGACUGCGGGCC
+UCCUAUGGGUGGGUGGUCCG
+ACGCGGCCACCCACUACGGA
+UGCGCGCGGCGUCGGUCCGG
+GUACGCGCGACAGCGGGCGU
+GGGCCCGUCGGUCGCGGCGA
+GCGAACCGCGUCGGUGGGCC
+ACGUCAACUGGAAUCUCUUC
+GGCCUGUACACCCCCGGCGG
+AAGUACCGCCCUGCGCGGAA
+GCUAGUUGGUCGUCGGAUCU
+CCCGCGCUCGUCGAGCGCGG
+GGACCCGACGGCCCACAAGA
+AUGUGAUCGCCUCGAGUCUA
+AGACCCGACGUCGGACAAAG
+GGUUACCCGCCGCGCGCAAG
+GCGGGGCAAGGGUACCGGUG
+`
+  target.value = 'CD3ε'
+  genNum.value = '100'
 }
 
 // 重置表单
@@ -102,7 +163,7 @@ function handleReset() {
   seedSequence.value = defaultState.seedSequence
   target.value = defaultState.target
   model.value = defaultState.model
-  count.value = defaultState.count
+  genNum.value = defaultState.genNum
   submissionError.value = null
 }
 
@@ -117,11 +178,11 @@ async function handleSubmit() {
   const taskId = nanoid()
 
   formData.append('task_id', taskId)
-  formData.append('task_name', 'GRAPE-LM')
+  formData.append('task_name', `${target.value}_${model.value}`)
   formData.append('seed_seqs', seedSequence.value)
   formData.append('target', target.value)
   formData.append('model', model.value)
-  formData.append('gen_num', count.value)
+  formData.append('gen_num', genNum.value)
 
   try {
     const response = await fetch('/api/tasks', {
@@ -136,7 +197,10 @@ async function handleSubmit() {
 
     const data = await response.json()
     // 成功后跳转到结果页
-    router.push({ name: 'Result', params: { taskId: data.task_id } })
+    router.push({
+      name: 'Result',
+      params: { taskId: data.task_id },
+    })
   } catch (error) {
     submissionError.value = error.message
   } finally {
@@ -171,15 +235,16 @@ async function handleSubmit() {
             :class="validationError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'"
             placeholder="Enter your seed sequences here, one per line (20 bases long, RNA only)..."
             spellcheck="false"
+            required
           ></textarea>
           <!-- 验证错误提示 -->
           <p v-if="validationError" class="mt-2 text-sm text-red-600">{{ validationError }}</p>
         </div>
 
         <!-- 下拉框和数量输入 -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="flex justify-between space-x-4 mb-6">
           <!-- Target 下拉框 -->
-          <div>
+          <div class="w-full">
             <label
               for="target"
               class="block text-lg font-medium text-gray-700 dark:text-gray-400 mb-2"
@@ -194,7 +259,7 @@ async function handleSubmit() {
             </select>
           </div>
           <!-- Model 下拉框 -->
-          <div>
+          <div class="w-full">
             <label
               for="model"
               class="block text-lg font-medium text-gray-700 dark:text-gray-400 mb-2"
@@ -209,7 +274,7 @@ async function handleSubmit() {
             </select>
           </div>
           <!-- 数量输入 -->
-          <div>
+          <div class="w-full">
             <label
               for="count"
               class="block text-lg font-medium text-gray-700 dark:text-gray-400 mb-2"
@@ -218,14 +283,16 @@ async function handleSubmit() {
             <input
               type="number"
               id="count"
-              v-model="count"
+              v-model="genNum"
               min="1"
-              max="10000"
+              :max="maxGenNum"
+              required
               class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:border-gray-800 dark:text-gray-400 transition"
             />
           </div>
         </div>
 
+        <!-- 按钮 -->
         <div class="flex items-center justify-center space-x-4">
           <button
             type="button"
@@ -255,9 +322,37 @@ async function handleSubmit() {
       <!-- 提交错误显示 -->
       <div
         v-if="submissionError"
-        class="mt-8 p-4 rounded-lg bg-red-100 border border-red-400 text-red-800"
+        class="mt-6 p-4 rounded-lg bg-red-100 border border-red-400 text-red-800"
       >
         <p>Error {{ submissionError }}</p>
+      </div>
+
+      <!-- 说明 -->
+      <div class="mt-6 p-4 text-gray-700">
+        <p class="text-sm mb-2 dark:text-gray-400">
+          <strong>Note:</strong>
+        </p>
+        <ul class="text-sm dark:text-gray-500 space-y-1.5 list-disc list-inside">
+          <li>
+            Online generation may take several minutes due to CPU-only computation. For faster
+            processing or to explore other language models (which require GPU acceleration), please
+            run our
+            <a
+              href="https://github.com/tansaox2008123/GRAPE-LM"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="dark:text-gray-500 underline hover:text-blue-700 dark:hover:text-blue-400"
+              >open-source code</a
+            >
+            locally.
+          </li>
+          <li>Gaussian noise is applied during generation to introduce stochastic variation.</li>
+          <li>
+            Currently, the method is optimized for 20-base seed sequences and generates 20-base
+            aptamers candidates. Future updates will extend support to longer sequences and broader
+            applications.
+          </li>
+        </ul>
       </div>
       <!-- <div class="mt-8 text-center">
         <router-link to="/" class="text-violet-600 hover:text-violet-800 font-semibold">

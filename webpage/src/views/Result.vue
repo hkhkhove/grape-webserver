@@ -23,21 +23,36 @@ const formatDate = (dateString) => {
 // 下载结果文件
 const downloadResult = async () => {
   try {
-    const response = await fetch(`/api/tasks/${props.taskId}/download`)
-    if (!response.ok) {
-      const errorText = await response.text()
-      throw new Error(`[${response.status}]: ${errorText || 'Unknown error'}`)
+    // 如果已经有结果数据，直接使用
+    if (resultSequences.value) {
+      const blob = new Blob([resultSequences.value], { type: 'text/plain' })
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = url
+      a.download = `GRAPE-LM_${taskResponse.value.data.task_name}_generation_${props.taskId.slice(0, 4)}.txt`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } else {
+      // 如果没有数据，则请求下载
+      const response = await fetch(`/api/tasks/${props.taskId}/download`)
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`[${response.status}]: ${errorText || 'Unknown error'}`)
+      }
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = url
+      a.download = `GRAPE-LM_${taskResponse.value.data.task_name}_generation_${props.taskId.slice(0, 8)}.txt`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
     }
-    const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.style.display = 'none'
-    a.href = url
-    a.download = `generation_${props.taskId}.txt`
-    document.body.appendChild(a)
-    a.click()
-    window.URL.revokeObjectURL(url)
-    document.body.removeChild(a)
   } catch (e) {
     fetchError.value = e.message
   }
@@ -66,13 +81,11 @@ const fetchTaskStatus = async () => {
       const errorText = await response.text()
       throw new Error(`[${response.status}]: ${errorText || 'Unknown error'}`)
     }
-    const data = await response.json()
-    taskResponse.value = data
-
+    taskResponse.value = await response.json()
     // 检查任务是否完成或失败
-    if (data.type === 'Completed' || data.type === 'Failed') {
+    if (taskResponse.value.status === 'Completed' || taskResponse.value.status === 'Failed') {
       clearInterval(pollingInterval)
-      if (data.type === 'Completed') {
+      if (taskResponse.value.status === 'Completed') {
         await fetchAndShowResultContent()
       }
     }
@@ -119,12 +132,12 @@ onUnmounted(() => {
             <span
               class="font-semibold"
               :class="{
-                'text-violet-600': taskResponse.type === 'Pending',
-                'text-blue-600': taskResponse.type === 'Processing',
-                'text-green-600': taskResponse.type === 'Completed',
-                'text-red-600': taskResponse.type === 'Failed',
+                'text-violet-600': taskResponse.status === 'Pending',
+                'text-blue-600': taskResponse.status === 'Processing',
+                'text-green-600': taskResponse.status === 'Completed',
+                'text-red-600': taskResponse.status === 'Failed',
               }"
-              >{{ taskResponse.type }}</span
+              >{{ taskResponse.status }}</span
             >
           </div>
           <div class="dark:text-gray-500">
@@ -142,7 +155,7 @@ onUnmounted(() => {
         </div>
 
         <div
-          v-if="taskResponse.type === 'Pending' || taskResponse.type === 'Processing'"
+          v-if="taskResponse.status === 'Pending' || taskResponse.status === 'Processing'"
           class="text-center py-8"
         >
           <!-- 等待动画 -->
@@ -167,7 +180,7 @@ onUnmounted(() => {
             ></path>
           </svg>
           <p
-            v-if="taskResponse.type === 'Pending'"
+            v-if="taskResponse.status === 'Pending'"
             class="text-lg text-gray-600 dark:text-gray-400"
           >
             Your task is queued at position
@@ -186,7 +199,7 @@ onUnmounted(() => {
         </div>
         <!-- 任务失败 -->
         <div
-          v-else-if="taskResponse.type === 'Failed'"
+          v-else-if="taskResponse.status === 'Failed'"
           class="p-4 rounded-lg bg-red-100 border border-red-400 text-red-800"
         >
           <p>
@@ -195,7 +208,7 @@ onUnmounted(() => {
           </p>
         </div>
         <!-- 任务成功 -->
-        <div v-else-if="taskResponse.type === 'Completed'">
+        <div v-else-if="taskResponse.status === 'Completed'">
           <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-400 mb-4">
             Generated Sequences
           </h2>

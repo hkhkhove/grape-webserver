@@ -33,25 +33,29 @@ pub struct TaskCreateResponse {
 
 // get_task_status的返回类型
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(tag = "type", content = "data")]
+#[serde(tag = "status", content = "data")]
 pub enum TaskResponse {
     Pending {
+        task_name: String,
         upload_time: DateTime<Utc>,
         start_time: String,
         end_time: String,
         position: Option<usize>,
     },
     Processing {
+        task_name: String,
         upload_time: DateTime<Utc>,
         start_time: Option<DateTime<Utc>>,
         end_time: String,
     },
     Completed {
+        task_name: String,
         upload_time: DateTime<Utc>,
         start_time: Option<DateTime<Utc>>,
         end_time: Option<DateTime<Utc>>,
     },
     Failed {
+        task_name: String,
         upload_time: DateTime<Utc>,
         start_time: Option<DateTime<Utc>>,
         end_time: Option<DateTime<Utc>>,

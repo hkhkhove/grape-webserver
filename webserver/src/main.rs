@@ -165,7 +165,7 @@ async fn upload_task(
 }
 
 fn validate_seed_sequences(seed_seqs: &str) -> Result<(), (StatusCode, String)> {
-    const MAX_SEQUENCES: usize = 10000;
+    // const MAX_SEQUENCES: usize = 10000;
 
     let lines: Vec<&str> = seed_seqs
         .lines()
@@ -173,17 +173,17 @@ fn validate_seed_sequences(seed_seqs: &str) -> Result<(), (StatusCode, String)> 
         .filter(|line| !line.is_empty())
         .collect();
 
-    // 检查数量限制
-    if lines.len() > MAX_SEQUENCES {
-        return Err((
-            StatusCode::BAD_REQUEST,
-            format!(
-                "Maximum {} sequences allowed. Got: {}",
-                MAX_SEQUENCES,
-                lines.len()
-            ),
-        ));
-    }
+    // // 检查数量限制
+    // if lines.len() > MAX_SEQUENCES {
+    //     return Err((
+    //         StatusCode::BAD_REQUEST,
+    //         format!(
+    //             "Maximum {} sequences allowed. Got: {}",
+    //             MAX_SEQUENCES,
+    //             lines.len()
+    //         ),
+    //     ));
+    // }
 
     // 检查每个序列
     for (i, line) in lines.iter().enumerate() {
@@ -206,7 +206,7 @@ fn validate_seed_sequences(seed_seqs: &str) -> Result<(), (StatusCode, String)> 
             return Err((
                 StatusCode::BAD_REQUEST,
                 format!(
-                    "Line {}: Sequence must be 20 characters long. Got: {}",
+                    "Line {}: Sequence must be 20 bases long. Got: {}",
                     i + 1,
                     line.len()
                 ),
@@ -253,6 +253,7 @@ async fn get_task_status(
                 .position(|id| id == &task_id)
                 .map(|p| p + 1 + Config::workers());
             TaskResponse::Pending {
+                task_name: task.name,
                 upload_time: task.upload_time,
                 start_time: "".to_string(),
                 end_time: "".to_string(),
@@ -260,16 +261,19 @@ async fn get_task_status(
             }
         }
         TaskStatus::Processing => TaskResponse::Processing {
+            task_name: task.name,
             upload_time: task.upload_time,
             start_time: task.start_time,
             end_time: "".to_string(),
         },
         TaskStatus::Completed => TaskResponse::Completed {
+            task_name: task.name,
             upload_time: task.upload_time,
             start_time: task.start_time,
             end_time: task.end_time,
         },
         TaskStatus::Failed => TaskResponse::Failed {
+            task_name: task.name,
             upload_time: task.upload_time,
             start_time: task.start_time,
             end_time: task.end_time,
